@@ -37,6 +37,11 @@ public class XposedMod implements IXposedHookLoadPackage {
 		mActivityMap.put("com.sec.android.app.launcher", "com.android.launcher2.Launcher");
 		mActivityMap.put("com.actionlauncher.playstore", "com.chrislacy.actionlauncher.ActionLauncher");
 		mActivityMap.put("com.chrislacy.actionlauncher.pro", "com.chrislacy.actionlauncher.ActionLauncher");
+		mActivityMap.put("org.adw.launcher", "org.adw.launcherlib.Launcher");
+		mActivityMap.put("org.adwfreak.launcher", "org.adw.launcherlib.Launcher");
+		mActivityMap.put("com.tul.aviate", "com.tul.aviator.ui.TabbedHomeActivity");
+		mActivityMap.put("com.campmobile.launcher", "com.campmobile.launcher.Launcher");
+		mActivityMap.put("com.kk.launcher", "com.kk.launcher.Launcher");
 	}
 
 	private void createHooks() {
