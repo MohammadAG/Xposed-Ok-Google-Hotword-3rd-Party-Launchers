@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mohammadag.thirdpartylauncherhotword"
-    android:versionCode="7"
-    android:versionName="1.1" >
+    android:versionCode="8"
+    android:versionName="1.2" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -20,7 +20,7 @@
             android:value="30+" />
         <meta-data
             android:name="xposeddescription"
-            android:value="Enable hotword detection on major 3rd party launchers" />
+            android:value="Enable hotword detection on 3rd party launchers and selective apps" />
 
         <activity
             android:name=".RefreshLaunchersActivity"
@@ -31,6 +31,10 @@
                 <category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />
             </intent-filter>
         </activity>
+        <activity android:name=".ActivityListActivity" />
+        <activity
+            android:name=".ApplicationListActivity"
+            android:label="@string/app_name" />
 
         <activity-alias
             android:name=".Activity-Launcher"

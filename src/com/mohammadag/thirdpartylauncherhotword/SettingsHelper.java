@@ -133,6 +133,20 @@ public class SettingsHelper {
 		return true;
 	}
 
+	public void removeLauncher(LauncherInfo info) {
+		HashSet<String> stringSet = new HashSet<String>();
+		Set<String> old = getLauncherStrings();
+		if (old != null)
+			stringSet.addAll(old);
+
+		String launcherString = info.infoToString();
+		if (stringSet.contains(launcherString)) {
+			stringSet.remove(launcherString);
+		}
+
+		edit().putStringSet("launchers", stringSet).commit();
+	}
+
 	private Set<String> getLauncherStrings() {
 		return getStringSet("launchers", null);
 	}

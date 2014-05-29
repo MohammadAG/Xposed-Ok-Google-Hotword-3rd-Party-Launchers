@@ -2,10 +2,12 @@ package com.mohammadag.thirdpartylauncherhotword;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 public class RefreshLaunchersActivity extends Activity {
@@ -18,6 +20,13 @@ public class RefreshLaunchersActivity extends Activity {
 
 		SettingsHelper helper = new SettingsHelper(getApplicationContext());
 		helper.refreshLaunchers(this, (TextView) findViewById(R.id.textView1));
+
+		findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(RefreshLaunchersActivity.this, ApplicationListActivity.class));
+			}
+		});
 	}
 
 	@Override

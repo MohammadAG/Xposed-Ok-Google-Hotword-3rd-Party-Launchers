@@ -1,7 +1,8 @@
 <resources>
 
-    <string name="app_name">Ok Google for 3rd party launchers</string>
-
+    <string name="app_name">Ok Google for 3rd party activities</string>
     <string name="toggle_launcher_icon_title">Toggle launcher icon</string>
+    <string name="action_search">Search</string>
+    <string name="all_the_wonderful_activities">All activities</string>
 
 </resources>
