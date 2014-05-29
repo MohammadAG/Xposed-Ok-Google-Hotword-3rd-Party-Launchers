@@ -1,18 +1,21 @@
 package com.mohammadag.thirdpartylauncherhotword;
 
 import java.util.HashMap;
+import java.util.Set;
 
 import com.google.android.hotword.client.HotwordServiceClient;
 
 import android.app.Activity;
 import android.os.Bundle;
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public class XposedMod implements IXposedHookLoadPackage {
+public class XposedMod implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 	private static HotwordServiceClient mHotwordServiceClient;
 	private static XC_MethodHook mOnCreateHook;
 	private static XC_MethodHook mOnAttachedToWindowHook;
@@ -42,6 +45,30 @@ public class XposedMod implements IXposedHookLoadPackage {
 		mActivityMap.put("com.tul.aviate", "com.tul.aviator.ui.TabbedHomeActivity");
 		mActivityMap.put("com.campmobile.launcher", "com.campmobile.launcher.Launcher");
 		mActivityMap.put("com.kk.launcher", "com.kk.launcher.Launcher");
+		mActivityMap.put("com.android.launcher3", "com.android.launcher3.Launcher");
+		mActivityMap.put("com.lge.launcher2", "com.lge.launcher2.Launcher");
+		mActivityMap.put("com.bam.android.inspirelauncher", "com.bam.android.inspirelauncher.Launcher");
+		mActivityMap.put("com.mobint.hololauncher.hd", "com.mobint.hololauncher.Launcher");
+	}
+
+	@Override
+	public void initZygote(StartupParam startupParam) throws Throwable {
+		SettingsHelper helper = new SettingsHelper();
+		Set<LauncherInfo> launchers = helper.getLaunchers();
+		if (launchers == null) {
+			helper = null;
+			return;
+		}
+
+		for (LauncherInfo info : launchers) {
+			if (mActivityMap.containsKey(info.getPackageName()))
+				continue;
+
+			mActivityMap.put(info.getPackageName(), info.getActivityName());
+		}
+
+		helper = null;
+		launchers = null;
 	}
 
 	private void createHooks() {
@@ -87,10 +114,17 @@ public class XposedMod implements IXposedHookLoadPackage {
 
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
-		if (!mActivityMap.containsKey(lpparam.packageName))
-			return;
+		Class<?> Launcher;
+		if (mActivityMap.containsKey(lpparam.packageName)) {
+			Launcher = XposedHelpers.findClass(mActivityMap.get(lpparam.packageName), lpparam.classLoader);
+		} else {
+			try {
+				Launcher = XposedHelpers.findClass(lpparam.packageName + ".Launcher", lpparam.classLoader);
+			} catch (ClassNotFoundError e) {
+				return;
+			}
+		}
 
-		Class<?> Launcher = XposedHelpers.findClass(mActivityMap.get(lpparam.packageName), lpparam.classLoader);
 		hookLauncherClass(Launcher);
 	}
 
